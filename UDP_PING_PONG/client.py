@@ -59,6 +59,7 @@ def sendSegment(segment=0):
     sendMessage(msg,con)
     print("[3] REQ seg=0")
     result =  sendMessage("REQ|seq=0",con,False) 
+    con.close()
     foundData = False
     countPipe =0
     it =0
@@ -76,7 +77,7 @@ def sendSegment(segment=0):
         data.append(c)
     [print(f"{c:#x}", end=" ") for c in data]
     print()
-    con.close()
+
     
 
 if __name__ == "__main__":
