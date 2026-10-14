@@ -13,16 +13,16 @@ class FSM:
     def __init__(self) -> None:
         self.state=states[0] 
         self.seq_waiting = 0
-        self.socket = udp.setupConnection(5)
         self.md5 = hashlib.md5()
-    def execute(self):
+    def execute(self,server,group,file):
         count_seq = 0
         arquivo = bytearray()
 
-        con = udp.setupConnection()
-        result = udp.sendHello(con=con)
-
+        con = udp.setupConnection(server,group)
+        result = udp.sendHello(con=con,file=file)
+        print("Fazendo o download ",end=" ")
         while count_seq < int(result['totalSegmentos']):
+            print(".",end="",flush=True)
             if self.state == states[0]:
                 try:
                     a = udp.sendSegment(count_seq, con)
@@ -39,7 +39,7 @@ class FSM:
 
 
         self.md5.update(arquivo)
-
+        print()
         result = udp.sendMessage(f'FIN|checksum={hashlib.md5(arquivo).hexdigest()}',con)
         print(result)
         con.close()

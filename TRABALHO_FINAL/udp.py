@@ -3,9 +3,15 @@ serverName="137.131.178.229"
 serverPort = 8080
 grupo = "grupo09"
 
-def setupConnection(timeout=5.0):
+def setupConnection(server,group,timeout=5.0):
     clientSocket = socket(AF_INET, SOCK_DGRAM)
     clientSocket.settimeout(timeout)
+    global serverName
+    global  grupo
+    serverName=server
+    grupo = group
+
+
     return  clientSocket 
 
 def sendMessage(msg,socket,toDecode=True)->str:
@@ -21,8 +27,8 @@ def sendMessage(msg,socket,toDecode=True)->str:
         print("ih rapaz deu outro problema")
         return ""
 
-def sendHello(segment_size=512,con=None):
-    msg = "HELLO|grupo="+grupo+"|segment_size="+str(segment_size)+"|file=small"
+def sendHello(segment_size=512,con=None,file=None):
+    msg = "HELLO|grupo="+grupo+"|segment_size="+str(segment_size)+"|file="+str(file)
     result =''
     try:
         result = sendMessage(msg,con)
