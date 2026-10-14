@@ -48,19 +48,16 @@ def sendHello(segment_size=512,con=None):
     return helloData
 
 def sendSegment(segment=0,con=None):
-    print("segmento solicitado: ",segment)
+    #print("segmento solicitado: ",segment)
     try:
         result =  sendMessage("REQ|seq="+str(segment),con,False) 
-        sendMessage("ACK|seq="+str(segment),con,False) 
+        #sendMessage("ACK|seq="+str(segment),con,False) 
     except Exception as e:
         print("pow dei problema aqui cara",e)
         raise
 
-    #con.close()
     foundData = False
     countPipe =0
-    #print("Mensagem recebida:", repr(result))
-    #print("Tamanho:", len(result))
     it =0
     while(not foundData):
         if(countPipe==3):
@@ -68,11 +65,10 @@ def sendSegment(segment=0,con=None):
         elif(result[it]==0x7C):
            countPipe+=1
         it+=1 
-    it+=1
-    print(f"\tPrimeiros 8 bytes: ", end=" ")
+    #print(f"\tPrimeiros 8 bytes: ", end=" ")
+    #print(result[it:it+8])
     primeiros = result[it:it+8]
-    print(type(primeiros))
-    return result
+    return result[it:] 
     data = []
     for c in primeiros:
         data.append(c)
