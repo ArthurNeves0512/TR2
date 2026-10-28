@@ -1,3 +1,4 @@
+import re
 from socket import *
 serverName="137.131.178.229"
 serverPort = 8080
@@ -27,6 +28,7 @@ def sendMessage(msg,socket,toDecode=True)->str:
         print("ih rapaz deu outro problema")
         return ""
 
+
 def sendHello(segment_size=512,con=None,file=None):
     msg = "HELLO|grupo="+grupo+"|segment_size="+str(segment_size)+"|file="+str(file)
     result =''
@@ -46,7 +48,7 @@ def sendHello(segment_size=512,con=None,file=None):
     helloData["segment_size"]=splitted[5].split("=")[1]
 
     print("[2] HELLO")
-    print(f"\t Arquivo: small ({helloData['fileSize']} bytes = {int(helloData['fileSize'])/1024} KB)")
+    print(f"\t Arquivo: {file} ({helloData['fileSize']} bytes = {int(helloData['fileSize'])/1024} KB)")
     print(f"\t Checksum MD5: {helloData['checkSum']}")
     print(f"\t Total segmentos: {helloData['totalSegmentos']}")
     print(f"\t Tamanho segmento: {helloData['segment_size']} bytes")
@@ -62,25 +64,62 @@ def sendSegment(segment=0,con=None):
         print("pow dei problema aqui cara",e)
         raise
 
-    foundData = False
-    countPipe =0
-    it =0
-    while(not foundData):
-        if(countPipe==3):
-            break
-        elif(result[it]==0x7C):
-           countPipe+=1
-        it+=1 
-    #print(f"\tPrimeiros 8 bytes: ", end=" ")
-    #print(result[it:it+8])
-    primeiros = result[it:it+8]
-    return result[it:] 
-    data = []
-    for c in primeiros:
-        data.append(c)
-    [print(f"{c:#x}", end=" ") for c in data]
-    print()
+    while True:
+        countPipe = 0
+        it = 0
+        
+        while it < len(result) and countPipe < 3:
+            if result[it] == 0x7C:
+                countPipe += 1
+            it += 1 
+            
+        if countPipe < 3:
+            raise Exception(f"Pacote malformado do servidor: {result}")
+
+        # confere se o pacote recebido é o que pedimos (mesmo seq)
+        achou = re.search(rb"seq=(\d+)", result[:it])
+        if achou and int(achou.group(1)) == segment:
+            return result[it:]
+        result, _ = con.recvfrom(65507)
 
 def sendACKbySegmentRecieved(segment,con):
     sendMessage(f'ACK|seq={segment}',con)
 
+def sendREQ(segment, con):
+    # só envia o REQ e NÃO espera resposta
+    con.sendto(("REQ|seq=" + str(segment)).encode(), (serverName, serverPort))
+
+def sendACK(segment, con):
+    # só envia o ACK e NÃO espera resposta
+    con.sendto(("ACK|seq=" + str(segment)).encode(), (serverName, serverPort))
+
+def recvDATA(con, espera):
+    # espera um pacote por no máximo 'espera' segundos
+    # devolve (seq, payload) ou None se deu timeout
+    con.settimeout(max(espera, 0.001))
+    try:
+        pacote, _ = con.recvfrom(65507)
+    except timeout:
+        return None
+    except ConnectionResetError:   
+        return None
+    pipes = 0
+    it = 0
+    while it < len(pacote) and pipes < 3:
+        if pacote[it] == 0x7C:
+            pipes += 1
+        it += 1
+    achou = re.search(rb"seq=(\d+)", pacote[:it])
+    if pipes < 3 or not achou:
+        return None
+    return int(achou.group(1)), pacote[it:]
+
+def limparBuffer(con):
+    con.settimeout(0.05)
+    try:
+        while True:
+            con.recvfrom(65507)
+    except timeout:
+        pass
+    except ConnectionResetError:
+        pass

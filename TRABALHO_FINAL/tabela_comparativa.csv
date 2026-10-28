@@ -1,0 +1,8 @@
+﻿Protocolo,Janela,0% perda,5% perda,10% perda
+SAW,1,118.0 kbps / 36 retx / 71.1 s,81.8 kbps / 128 retx / 102.5 s,62.2 kbps / 239 retx / 134.9 s
+GBN,4,475.9 kbps / 48 retx / 17.6 s,153.8 kbps / 520 retx / 54.5 s,84.8 kbps / 1108 retx / 98.9 s
+GBN,8,612.2 kbps / 128 retx / 13.7 s,186.9 kbps / 987 retx / 44.9 s,100.4 kbps / 2016 retx / 83.6 s
+GBN,16,1774.7 kbps / 48 retx / 4.7 s,215.6 kbps / 1883 retx / 38.9 s,111.4 kbps / 3840 retx / 75.3 s
+SR,4,393.3 kbps / 46 retx / 21.3 s,172.2 kbps / 153 retx / 48.7 s,109.6 kbps / 312 retx / 76.5 s
+SR,8,829.4 kbps / 39 retx / 10.1 s,224.8 kbps / 202 retx / 37.3 s,150.7 kbps / 338 retx / 55.7 s
+SR,16,1488.2 kbps / 41 retx / 5.6 s,303.6 kbps / 163 retx / 27.6 s,240.3 kbps / 224 retx / 34.9 s
