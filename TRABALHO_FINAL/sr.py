@@ -2,8 +2,15 @@ import time
 import random
 import udp
 
-def receber(con, total, window, loss, registrar):
+def receber(con, total, window, loss, registrar, adaptativo=True):
     timeout = con.gettimeout()
+
+    alpha = 0.125
+    beta = 0.25
+
+    rtt_est = None
+    dev_rtt = None
+
     arquivo = bytearray()
     buffer = {}       # segmentos recebidos fora de ordem: seq -> payload
     base = 0
@@ -48,14 +55,26 @@ def receber(con, total, window, loss, registrar):
         # guarda, mesmo fora de ordem
         agora = time.time()
         rtt_ms = (agora - envio[seq]) * 1000
+        rtt = rtt_ms / 1000
+
+        if rtt_est is None:
+            rtt_est = rtt
+            dev_rtt = rtt / 2
+        else:
+            dev_rtt = (1 - beta) * dev_rtt + beta * abs(rtt - rtt_est)
+            rtt_est = (1 - alpha) * rtt_est + alpha * rtt
+
+        if adaptativo:
+            timeout = rtt_est + 4 * dev_rtt
         buffer[seq] = payload
-        #udp.sendACK(seq, con)
+        udp.sendACK(seq, con)
         registrar(seq, len(payload), rtt_ms, timeout * 1000,
-                  retx[seq], int(retx[seq] > 0), perdido[seq])
+                  retx[seq], int(retx[seq] > 0), perdido[seq], rtt_est *1000)
 
         # reordena: entrega em ordem e desliza a janela
         while base in buffer:
             arquivo.extend(buffer.pop(base))
             base += 1
-
+    print("RTT estimado:", rtt_est * 1000)
+    
     return arquivo, retx_total

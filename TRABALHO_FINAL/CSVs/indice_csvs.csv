@@ -1,0 +1,41 @@
+arquivo,entrega,protocolo,janela,arquivo_servidor,perda_simulada_pct,timeout,alpha,beta,seed,rede,retransmissoes,inicio,uso_no_relatorio,nome_original
+entrega1/metrics_grupo09_saw_20261015_104620.csv,1,saw,1,small,0,fixo 5000 ms,,,,residencial,22,2026-10-15 10:46:20,Entrega 1,metrics_grupo09_saw_1792071980.csv
+entrega1/metrics_grupo09_saw_20261015_111856.csv,1,saw,1,large,0,fixo 5000 ms,,,,residencial,230,2026-10-15 11:18:56,Entrega 1,metrics_grupo09_saw_1792073936.csv
+entrega1/metrics_grupo09_saw_20261027_145648.csv,1,saw,1,small,0,fixo 5000 ms,,,,residencial,0,2026-10-27 14:56:48,Entrega 1,metrics_grupo09_gbn_w4_small_loss0_1793123808.csv
+entrega1/metrics_grupo09_saw_20261028_000337.csv,1,saw,1,small,0,fixo 300 ms,,,,residencial,36,2026-10-28 00:03:37,Entrega 1,metrics_grupo09_saw_w1_small_loss0_1793156617.csv
+entrega1/metrics_grupo09_saw_20261028_000448.csv,1,saw,1,small,5,fixo 300 ms,,,,residencial,128,2026-10-28 00:04:48,Entrega 1,metrics_grupo09_saw_w1_small_loss5_1793156688.csv
+entrega1/metrics_grupo09_saw_20261028_000631.csv,1,saw,1,small,10,fixo 300 ms,,,,residencial,239,2026-10-28 00:06:31,Entrega 1,metrics_grupo09_saw_w1_small_loss10_1793156791.csv
+entrega2/metrics_grupo09_gbn_20261027_234934.csv,2,gbn,4,small,0,fixo 300 ms,,,,residencial,48,2026-10-27 23:49:34,Entrega 2,metrics_grupo09_gbn_w4_small_loss0_1793155774.csv
+entrega2/metrics_grupo09_gbn_20261027_234952.csv,2,gbn,4,small,5,fixo 300 ms,,,,residencial,520,2026-10-27 23:49:52,Entrega 2,metrics_grupo09_gbn_w4_small_loss5_1793155792.csv
+entrega2/metrics_grupo09_gbn_20261027_235047.csv,2,gbn,4,small,10,fixo 300 ms,,,,residencial,1108,2026-10-27 23:50:47,Entrega 2,metrics_grupo09_gbn_w4_small_loss10_1793155847.csv
+entrega2/metrics_grupo09_gbn_20261027_235226.csv,2,gbn,8,small,0,fixo 300 ms,,,,residencial,128,2026-10-27 23:52:26,Entrega 2,metrics_grupo09_gbn_w8_small_loss0_1793155946.csv
+entrega2/metrics_grupo09_gbn_20261027_235240.csv,2,gbn,8,small,5,fixo 300 ms,,,,residencial,987,2026-10-27 23:52:40,Entrega 2,metrics_grupo09_gbn_w8_small_loss5_1793155960.csv
+entrega2/metrics_grupo09_gbn_20261027_235325.csv,2,gbn,8,small,10,fixo 300 ms,,,,residencial,2016,2026-10-27 23:53:25,Entrega 2,metrics_grupo09_gbn_w8_small_loss10_1793156005.csv
+entrega2/metrics_grupo09_gbn_20261027_235449.csv,2,gbn,16,small,0,fixo 300 ms,,,,residencial,48,2026-10-27 23:54:49,Entrega 2,metrics_grupo09_gbn_w16_small_loss0_1793156089.csv
+entrega2/metrics_grupo09_gbn_20261027_235454.csv,2,gbn,16,small,5,fixo 300 ms,,,,residencial,1883,2026-10-27 23:54:54,Entrega 2,metrics_grupo09_gbn_w16_small_loss5_1793156094.csv
+entrega2/metrics_grupo09_gbn_20261027_235533.csv,2,gbn,16,small,10,fixo 300 ms,,,,residencial,3840,2026-10-27 23:55:33,Entrega 2,metrics_grupo09_gbn_w16_small_loss10_1793156133.csv
+entrega2/metrics_grupo09_sr_20261027_235649.csv,2,sr,4,small,0,fixo 300 ms,,,,residencial,46,2026-10-27 23:56:49,Entrega 2,metrics_grupo09_sr_w4_small_loss0_1793156209.csv
+entrega2/metrics_grupo09_sr_20261027_235710.csv,2,sr,4,small,5,fixo 300 ms,,,,residencial,153,2026-10-27 23:57:10,Entrega 2,metrics_grupo09_sr_w4_small_loss5_1793156230.csv
+entrega2/metrics_grupo09_sr_20261027_235759.csv,2,sr,4,small,10,fixo 300 ms,,,,residencial,312,2026-10-27 23:57:59,Entrega 2,metrics_grupo09_sr_w4_small_loss10_1793156279.csv
+entrega2/metrics_grupo09_sr_20261027_235916.csv,2,sr,8,small,0,fixo 300 ms,,,,residencial,39,2026-10-27 23:59:16,Entrega 2,metrics_grupo09_sr_w8_small_loss0_1793156356.csv
+entrega2/metrics_grupo09_sr_20261027_235926.csv,2,sr,8,small,5,fixo 300 ms,,,,residencial,202,2026-10-27 23:59:26,Entrega 2,metrics_grupo09_sr_w8_small_loss5_1793156366.csv
+entrega2/metrics_grupo09_sr_20261028_000004.csv,2,sr,8,small,10,fixo 300 ms,,,,residencial,338,2026-10-28 00:00:04,Entrega 2,metrics_grupo09_sr_w8_small_loss10_1793156404.csv
+entrega2/metrics_grupo09_sr_20261028_000100.csv,2,sr,16,small,0,fixo 300 ms,,,,residencial,41,2026-10-28 00:01:00,Entrega 2,metrics_grupo09_sr_w16_small_loss0_1793156460.csv
+entrega2/metrics_grupo09_sr_20261028_000106.csv,2,sr,16,small,5,fixo 300 ms,,,,residencial,163,2026-10-28 00:01:06,Entrega 2,metrics_grupo09_sr_w16_small_loss5_1793156466.csv
+entrega2/metrics_grupo09_sr_20261028_000134.csv,2,sr,16,small,10,fixo 300 ms,,,,residencial,224,2026-10-28 00:01:34,Entrega 2,metrics_grupo09_sr_w16_small_loss10_1793156494.csv
+entrega3/metrics_grupo09_gbn_20261110_142445.csv,3,gbn,8,small,5,fixo 1000 ms,,,1,5G,915,2026-11-10 14:24:45,fixo x adaptativo (5G),metrics_grupo09_gbn_w8_small_loss5_1794331485.csv
+entrega3/metrics_grupo09_gbn_20261110_143039.csv,3,gbn,8,small,5,adaptativo,0.125,0.25,1,5G,1235,2026-11-10 14:30:39,fixo x adaptativo (5G),gbn_w8_loss5_fixo_s1.csv
+entrega3/metrics_grupo09_gbn_20261110_145039.csv,3,gbn,8,small,5,adaptativo,0.05,0.25,2,UnB Wireless,2435,2026-11-10 14:50:39,alfa-beta,gbn_w8_loss5_adapt_a0.05_b0.25_s2.csv
+entrega3/metrics_grupo09_gbn_20261110_145217.csv,3,gbn,8,small,5,adaptativo,0.05,0.25,1,UnB Wireless,5104,2026-11-10 14:52:17,alfa-beta,gbn_w8_loss5_adapt_a0.05_b0.25_s1.csv
+entrega3/metrics_grupo09_gbn_20261110_145540.csv,3,gbn,8,small,5,adaptativo,0.5,0.25,1,UnB Wireless,3843,2026-11-10 14:55:40,alfa-beta,gbn_w8_loss5_adapt_a0.5_b0.25_s1.csv
+entrega3/metrics_grupo09_gbn_20261110_145717.csv,3,gbn,8,small,5,adaptativo,0.5,0.25,2,UnB Wireless,4584,2026-11-10 14:57:17,alfa-beta,gbn_w8_loss5_adapt_a0.5_b0.25_s2.csv
+entrega3/metrics_grupo09_gbn_20261110_150153.csv,3,gbn,8,small,5,adaptativo,0.125,0.1,1,UnB Wireless,1027,2026-11-10 15:01:53,alfa-beta,gbn_w8_loss5_adapt_a0.125_b0.1_s1.csv
+entrega3/metrics_grupo09_gbn_20261110_150339.csv,3,gbn,8,small,5,adaptativo,0.125,0.1,2,UnB Wireless,1016,2026-11-10 15:03:39,alfa-beta,gbn_w8_loss5_adapt_a0.125_b0.1_s2.csv
+entrega3/metrics_grupo09_gbn_20261110_150521.csv,3,gbn,8,small,5,adaptativo,0.125,0.5,1,UnB Wireless,1107,2026-11-10 15:05:21,alfa-beta,gbn_w8_loss5_adapt_a0.125_b0.5_s1.csv
+entrega3/metrics_grupo09_gbn_20261110_150701.csv,3,gbn,8,small,5,adaptativo,0.125,0.5,2,UnB Wireless,3640,2026-11-10 15:07:01,alfa-beta,gbn_w8_loss5_adapt_a0.125_b0.5_s2.csv
+entrega3/metrics_grupo09_gbn_20261110_153201.csv,3,gbn,8,small,10,fixo 1000 ms,,,2,UnB Wireless,2120,2026-11-10 15:32:01,fixo x adaptativo,gbn_w8_loss5_s1.csv
+entrega3/metrics_grupo09_gbn_20261110_171252.csv,3,gbn,8,small,10,adaptativo,0.125,0.25,1,UnB Wireless,5984,2026-11-10 17:12:52,fixo x adaptativo,gbn_w8_loss5_s2.csv
+entrega3/metrics_grupo09_gbn_20261110_194017.csv,3,gbn,8,large,0,fixo 1000 ms,,,,residencial,360,2026-11-10 19:40:17,Wireshark (arquivo large),gbn_w8_loss0_large.csv
+entrega3/metrics_grupo09_gbn_20261110_232012.csv,3,gbn,16,large,0,adaptativo,0.125,0.25,,residencial,36567,2026-11-10 23:20:12,visao integrada (large),metrics_grupo09_gbn_w16_large_loss0_1794363612.csv
+entrega3/metrics_grupo09_sr_20261110_232307.csv,3,sr,16,large,0,fixo 1000 ms,,,,residencial,32,2026-11-10 23:23:07,visao integrada (large),metrics_grupo09_sr_w16_large_loss0_1794363787.csv
+entrega3/metrics_grupo09_gbn_20261110_233613.csv,3,gbn,16,large,0,fixo 1000 ms,,,,residencial,208,2026-11-10 23:36:13,visao integrada (large),metrics_grupo09_gbn_w16_large_loss0_1794364573.csv

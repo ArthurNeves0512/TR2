@@ -13,15 +13,16 @@ def main():
     parser.add_argument("--protocol",type=str,default="saw",choices=["saw","gbn","sr"])  
     parser.add_argument("--window",type=int,default=1)             
     parser.add_argument("--loss",type=float,default=0.0)           
-    parser.add_argument("--timeout",type=float,default=1.0)        
-    parser.add_argument("--seed",type=int,default=None) 
+    parser.add_argument("--timeout",type=float,default=0.043)        
+    parser.add_argument("--seed",type=int,default=None)
+    parser.add_argument("--fixo",action="store_true") 
 
     args = parser.parse_args()
     random.seed(args.seed)  # para tornar a perda simulada reproduzível
 
     try:
         reciever.execute(args.server,args.group,args.file,
-                         args.protocol,args.window,args.loss,args.timeout)
+                         args.protocol,args.window,args.loss,args.timeout,not args.fixo)
     except Exception as e:
 
         print("lascou bahia",e)

@@ -37,7 +37,7 @@ class FSM:
             ])
 
     # parâmetros protocol, window, loss e timeout_s
-    def execute(self, server, group, file, protocol="saw", window=1, loss=0.0, timeout_s=1.0):
+    def execute(self, server, group, file, protocol="saw", window=1, loss=0.0, timeout_s=1.0, adaptativo=True):
         if protocol == "saw":               
             window = 1
         self.protocol = protocol            
@@ -50,8 +50,9 @@ class FSM:
         count_seq = 0
         arquivo = bytearray()
         
-        con = udp.setupConnection(server, group, timeout_s)   
+        con = udp.setupConnection(server, group, 1.0)   
         result = udp.sendHello(con=con, file=file)
+        con.settimeout(timeout_s)  # timeout inicial do socket
         print("Fazendo o download ", end="")
         
         timestamp_atual = int(time.time())
@@ -77,6 +78,7 @@ class FSM:
             dev_rtt = None
 
             timeout_inicial = 1.0
+    
             con.settimeout(timeout_inicial)
 
             while count_seq < int(result['totalSegmentos']):
@@ -87,7 +89,7 @@ class FSM:
                         # Marca o tempo antes de enviar a REQ
                         start_time = time.time()
 
-                        a = udp.sendSegment(count_seq, con)
+                        a = udp.sendSegment(count_seq)
 
                         # Simula perda de pacote
                         if random.random() < loss / 100:
@@ -210,10 +212,10 @@ class FSM:
                         print("deu um erro aqui uai", e)
                         break
         elif protocol == "gbn":                                   
-            arquivo, self.total_retx = gbn.receber(con, int(result['totalSegmentos']), window, loss, self.registrar)
+            arquivo, self.total_retx = gbn.receber(con, int(result['totalSegmentos']), window, loss, self.registrar, adaptativo)
             con.settimeout(timeout_s)
         else:                                                    
-            arquivo, self.total_retx = sr.receber(con, int(result['totalSegmentos']), window, loss, self.registrar)
+            arquivo, self.total_retx = sr.receber(con, int(result['totalSegmentos']), window, loss, self.registrar, adaptativo)
             con.settimeout(timeout_s)
 
         tempo_total = time.time() - inicio 

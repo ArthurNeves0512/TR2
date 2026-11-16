@@ -2,7 +2,7 @@ import time
 import random
 import udp
 
-def receber(con, total, window, loss, registrar):
+def receber(con, total, window, loss, registrar, adaptativo=True):
     timeout = con.gettimeout()
 
     alpha = 0.125
@@ -74,8 +74,9 @@ def receber(con, total, window, loss, registrar):
                 + alpha * rtt
             )
 
-        timeout = rtt_est + 4 * dev_rtt
-        con.settimeout(timeout)
+        if adaptativo:
+            timeout = rtt_est + 4 * dev_rtt
+            con.settimeout(timeout)
 
         arquivo.extend(payload)
 
