@@ -24,7 +24,7 @@ class FSM:
         self.metrics_file = None
 
     # Registra metricas dos segmnetos gbn e sr no arquivo CSV
-    def registrar(self, seq, tamanho, rtt_ms, timeout_ms, retx, timeout_occ, perda_sim):
+    def registrar(self, seq, tamanho, rtt_ms, timeout_ms, retx, timeout_occ, perda_sim,rtt_estimado_ms=0.0):
         throughput_kbps = (tamanho * 8) / rtt_ms if rtt_ms > 0 else 0
         if retx == 0:
             self.rtts.append(rtt_ms)
@@ -32,7 +32,7 @@ class FSM:
             writer = csv.writer(csvfile)
             writer.writerow([
                 seq, datetime.now().isoformat(), tamanho, round(rtt_ms, 2),
-                0, timeout_ms, round(throughput_kbps, 2),
+                round(rtt_estimado_ms,2), timeout_ms, round(throughput_kbps, 2),
                 retx, timeout_occ, self.window, self.protocol, perda_sim
             ])
 
@@ -68,72 +68,147 @@ class FSM:
 
         inicio = time.time()
 
-        if protocol == "saw":                                    
+        
+        if protocol == "saw":
+            alpha = 0.125
+            beta = 0.25
+
+            rtt_est = None
+            dev_rtt = None
+
+            timeout_inicial = 1.0
+            con.settimeout(timeout_inicial)
+
             while count_seq < int(result['totalSegmentos']):
                 print(".", end="", flush=True)
+
                 if self.state == states[0]:
                     try:
-                        # Marca o tempo antes de enviar/receber o segmento
+                        # Marca o tempo antes de enviar a REQ
                         start_time = time.time()
-                    
+
                         a = udp.sendSegment(count_seq, con)
 
-                        # Simula perda de pacote com base na taxa de perda especificada
+                        # Simula perda de pacote
                         if random.random() < loss / 100:
                             perda_simulada = True
                             time.sleep(con.gettimeout())
                             raise timeout
-                    
-                        # Marca o tempo depois que o pacote chegou com sucesso
-                        end_time = time.time()
-                        rtt_medido_ms = (end_time - start_time) * 1000
-                        #udp.sendACK(count_seq,con)
 
+                        # Marca o tempo após receber a DATA
+                        end_time = time.time()
+
+                        rtt_medido_ms = (end_time - start_time) * 1000
+                        rtt_medido = rtt_medido_ms / 1000
+
+                        # Inicialização das estimativas na primeira amostra
+                        if rtt_est is None:
+                            rtt_est = rtt_medido
+                            dev_rtt = rtt_medido / 2
+
+                        else:
+                            # Atualiza DevRTT usando a estimativa anterior
+                            erro = abs(rtt_medido - rtt_est)
+
+                            dev_rtt = (
+                                (1 - beta) * dev_rtt
+                                + beta * erro
+                            )
+
+                            # Atualiza RTT estimado
+                            rtt_est = (
+                                (1 - alpha) * rtt_est
+                                + alpha * rtt_medido
+                            )
+
+                        # Calcula novo timeout
+                        timeout_adaptativo = rtt_est + (4 * dev_rtt)
+
+                        # Evita timeout zero ou valores muito pequenos
+                        timeout_adaptativo = max(timeout_adaptativo, 0.001)
+
+                        # Atualiza timeout do socket
+                        con.settimeout(timeout_adaptativo)
+
+                        # Armazena os dados recebidos
                         arquivo.extend(a)
-                    
+
                         tamanho_payload = len(a)
-                        throughput_kbps = (tamanho_payload * 8) / rtt_medido_ms if rtt_medido_ms > 0 else 0
+
+                        throughput_kbps = (
+                            (tamanho_payload * 8) / rtt_medido_ms
+                            if rtt_medido_ms > 0 else 0
+                        )
+
                         horario_recebimento = datetime.now().isoformat()
-                        timeout_configurado = con.gettimeout() * 1000 if con.gettimeout() else 1000
+
+                        timeout_configurado = timeout_adaptativo * 1000
+
                         self.rtts.append(rtt_medido_ms)
 
+                        # Registro das métricas
                         with open(self.metrics_file, mode='a', newline='') as csvfile:
                             writer = csv.writer(csvfile)
+
                             writer.writerow([
                                 count_seq,
                                 horario_recebimento,
                                 tamanho_payload,
                                 round(rtt_medido_ms, 2),
-                                0, 
-                                timeout_configurado,
+                                round(rtt_est * 1000, 2),
+                                round(timeout_configurado, 2),
                                 round(throughput_kbps, 2),
-                                0, # retransmissão
-                                0, # ocorreu_timeout
-                                1, 
+                                0,  # retransmissão
+                                0,  # ocorreu_timeout
+                                1,
                                 'saw',
-                                0 #Simula perda
+                                0  # Simula perda
                             ])
+
+                        print(
+                            f"\nSegmento {count_seq} | "
+                            f"RTT: {rtt_medido_ms:.2f} ms | "
+                            f"RTT_est: {rtt_est * 1000:.2f} ms | "
+                            f"DevRTT: {dev_rtt * 1000:.2f} ms | "
+                            f"Timeout: {timeout_configurado:.2f} ms"
+                        )
 
                         count_seq += 1
 
+                        perda_simulada = False
+
                     except timeout:
-                        print("\nTimeout! Retransmitindo pacote", count_seq)
-                        self.total_retx += 1 
-                        # Registrando a ocorrência de timeout no CSV
+                        print(
+                            f"\nTimeout! Retransmitindo pacote {count_seq}"
+                        )
+
+                        self.total_retx += 1
+
+                        # Registra timeout no CSV
                         with open(self.metrics_file, mode='a', newline='') as csvfile:
                             writer = csv.writer(csvfile)
+
                             writer.writerow([
-                                count_seq, datetime.now().isoformat(), 0, 0, 0, 
-                                con.gettimeout() * 1000 if con.gettimeout() else 1000, 
-                                0, 1, 1, 1, 'saw',
+                                count_seq,
+                                datetime.now().isoformat(),
+                                0,
+                                0,
+                                round(rtt_est * 1000, 2) if rtt_est is not None else 0,
+                                round(con.gettimeout() * 1000, 2),
+                                0,
+                                1,  # retransmissão
+                                1,  # ocorreu_timeout
+                                1,
+                                'saw',
                                 int(perda_simulada)
                             ])
-                            perda_simulada = False  # Resetando a flag de perda simulada
+
+                        perda_simulada = False
                         continue
+
                     except Exception as e:
                         print("deu um erro aqui uai", e)
                         break
-
         elif protocol == "gbn":                                   
             arquivo, self.total_retx = gbn.receber(con, int(result['totalSegmentos']), window, loss, self.registrar)
             con.settimeout(timeout_s)
